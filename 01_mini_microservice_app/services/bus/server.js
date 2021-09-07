@@ -15,8 +15,8 @@ app.post('/events', async (req, res) => {
 
     res.status(200).send({ status: 'OK' });
   } catch (err) {
-    res.status(400).send(err.message);
+    res.send(err.message);
   }
 });
 
-app.listen(4500, () => console.log('Listening on 4500'));
+app.listen(4500, () => console.log('Event bus listening on port 4500'));
