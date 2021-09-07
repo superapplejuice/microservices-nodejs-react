@@ -9,7 +9,7 @@
 
 # File extensions
 .DS_Store
-.env*
+.env
 
 # Log files
 npm-debug.log*
