@@ -46,8 +46,37 @@ app.post('/posts/:id/comments', async (req, res) => {
   res.status(201).send(postComments);
 });
 
-app.post('/events', (req, res) => {
-  console.log('Comments service received event:', req.body);
+const generateCommentUpdatedEvent = async (updatedComment, res) => {
+  try {
+    await axios.post('http://localhost:4500/events', {
+      type: 'CommentUpdated',
+      data: updatedComment,
+    });
+  } catch (err) {
+    res.send(err);
+  }
+};
+
+app.post('/events', async (req, res) => {
+  const { type, data } = req.body;
+  console.log('Comments service received event:', type);
+
+  if (type === 'CommentModerated') {
+    console.log('1. Updating moderated comment status...');
+
+    const { postId, id, status } = data;
+    const comments = commentsByPostId[postId];
+    const commentToUpdate = comments.find(comment => comment.id === id);
+
+    commentToUpdate.status = status;
+
+    console.log('2. Generating CommentUpdated event...');
+    await generateCommentUpdatedEvent(commentToUpdate, res);
+
+    console.log('3. Comment updated!');
+    res.send({ status: 'OK' });
+  }
+
   res.send({ status: 'OK', ...req.body });
 });
 
