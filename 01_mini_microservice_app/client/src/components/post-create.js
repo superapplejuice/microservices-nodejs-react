@@ -1,14 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
 import { POSTS_URL } from '../constants';
 import { generateNetworkError, refreshPage } from '../utils';
 
 const PostCreate = () => {
+  const inputRef = useRef();
+
   const [title, setTitle] = useState('');
   const [submitError, setSubmitError] = useState('');
   const [submitMessage, setSubmitMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    inputRef.current && inputRef.current.focus();
+  }, []);
 
   const createPost = async () => {
     await axios.post(POSTS_URL, { title });
@@ -41,6 +47,7 @@ const PostCreate = () => {
         <div>
           <label htmlFor="input-title">Post title</label>
           <input
+            ref={inputRef}
             name="input-title"
             type="text"
             value={title}
