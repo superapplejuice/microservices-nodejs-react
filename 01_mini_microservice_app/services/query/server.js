@@ -25,19 +25,23 @@ app.get('/posts', (req, res) => {
 
 app.post('/events', (req, res) => {
   console.log('Query service received event:', req.body);
+
   const { type, data } = req.body;
 
   if (type === 'PostCreated') {
+    console.log('1. Adding created post...');
     const { id, title } = data;
 
     posts[id] = { id, title, comments: [] };
   } else if (type === 'CommentCreated') {
+    console.log('1. Adding created comment...');
     const { id, content, postId, status } = data;
     const post = posts[postId];
 
     post.comments.push({ id, content, status });
   }
 
+  console.log('2. Query complete!');
   res.send({ status: 'OK', ...req.body });
 });
 

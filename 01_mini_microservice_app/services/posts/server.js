@@ -25,13 +25,17 @@ const generatePostCreatedEvent = async (newPost, res) => {
 };
 
 app.post('/posts', async (req, res) => {
+  console.log('1. Creating post...');
+
   const generatedPostId = randomBytes(4).toString('hex');
   const { title } = req.body;
   const newPost = { id: generatedPostId, title };
 
   posts[generatedPostId] = newPost;
+  console.log('2. Generating PostCreated event...');
   await generatePostCreatedEvent(newPost, res);
 
+  console.log('3. Post created!');
   res.status(201).send(posts[generatedPostId]);
 });
 

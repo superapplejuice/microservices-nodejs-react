@@ -27,6 +27,8 @@ const generateCommentCreatedEvent = async (commentData, res) => {
 };
 
 app.post('/posts/:id/comments', async (req, res) => {
+  console.log('1. Creating comment...');
+
   const generatedCommentId = randomBytes(4).toString('hex');
   const { content } = req.body;
 
@@ -37,8 +39,10 @@ app.post('/posts/:id/comments', async (req, res) => {
   postComments.push(newComment);
   commentsByPostId[postId] = postComments;
 
+  console.log('2. Generating CommentCreated event...');
   await generateCommentCreatedEvent({ ...newComment, postId }, res);
 
+  console.log('3. Comment created!');
   res.status(201).send(postComments);
 });
 
