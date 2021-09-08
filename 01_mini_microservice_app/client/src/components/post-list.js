@@ -33,7 +33,9 @@ const PostList = () => {
           <h2>Posts</h2>
           <div style={{ display: 'flex', flexWrap: 'wrap' }}>
             {posts.map(post => (
-              <PostCard key={post.id} {...post} />
+              <div key={post.id} style={{ flexBasis: '20%' }}>
+                <PostCard key={post.id} {...post} />
+              </div>
             ))}
           </div>
         </Fragment>
