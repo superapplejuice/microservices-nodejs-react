@@ -3,6 +3,8 @@ const { randomBytes } = require('crypto');
 const cors = require('cors');
 const axios = require('axios');
 
+const { PENDING_STATUS } = require('./constants');
+
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -30,7 +32,7 @@ app.post('/posts/:id/comments', async (req, res) => {
 
   const postId = req.params.id;
   const postComments = commentsByPostId[postId] || [];
-  const newComment = { id: generatedCommentId, content };
+  const newComment = { id: generatedCommentId, content, status: PENDING_STATUS };
 
   postComments.push(newComment);
   commentsByPostId[postId] = postComments;
