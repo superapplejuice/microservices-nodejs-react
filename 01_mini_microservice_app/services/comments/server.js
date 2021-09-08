@@ -41,7 +41,7 @@ app.post('/posts/:id/comments', async (req, res) => {
 });
 
 app.post('/events', (req, res) => {
-  console.log('Received event:', req.body);
+  console.log('Comments service received event:', req.body);
   res.send({ status: 'OK', ...req.body });
 });
 
