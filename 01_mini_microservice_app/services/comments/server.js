@@ -69,6 +69,7 @@ app.post('/events', async (req, res) => {
     const commentToUpdate = comments.find(comment => comment.id === id);
 
     commentToUpdate.status = status;
+    commentToUpdate.postId = postId;
 
     console.log('2. Generating CommentUpdated event...');
     await generateCommentUpdatedEvent(commentToUpdate, res);

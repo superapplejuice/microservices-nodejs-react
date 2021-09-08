@@ -56,7 +56,7 @@ app.post('/events', (req, res) => {
   }
 
   console.log('2. Query complete!');
-  res.send({ status: 'OK', ...req.body });
+  res.send({ status: 'OK' });
 });
 
 app.listen(4020, () => console.log('Query server listening on 4020'));

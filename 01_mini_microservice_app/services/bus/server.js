@@ -15,8 +15,8 @@ app.post('/events', async (req, res) => {
 
     await axios.post('http://localhost:4000/events', event);
     await axios.post('http://localhost:4010/events', event);
-    await axios.post('http://localhost:4015/events', event);
     await axios.post('http://localhost:4020/events', event);
+    await axios.post('http://localhost:4030/events', event);
 
     console.log('2. Events sent!');
     res.status(200).send({ status: 'OK' });

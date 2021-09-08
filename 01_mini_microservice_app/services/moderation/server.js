@@ -31,10 +31,10 @@ app.post('/events', async (req, res) => {
     await generateCommentModeratedEvent({ ...data, status: newStatus }, res);
 
     console.log('3. Comment moderated!');
-    res.status(202).send({ status: 'OK' });
+    res.send({ status: 'OK' });
   } else {
     res.send({ status: 'OK', ...req.body });
   }
 });
 
-app.listen(4015, () => console.log('Moderation service listening on 4015'));
+app.listen(4030, () => console.log('Moderation service listening on 4030'));
