@@ -60,7 +60,6 @@ const generateCommentUpdatedEvent = async (updatedComment, res) => {
 app.post('/events', async (req, res) => {
   const { type, data } = req.body;
   console.log('Comments service received event:', type);
-
   if (type === 'CommentModerated') {
     console.log('1. Updating moderated comment status...');
 
@@ -69,15 +68,16 @@ app.post('/events', async (req, res) => {
     const commentToUpdate = comments.find(comment => comment.id === id);
 
     commentToUpdate.status = status;
+    commentToUpdate.postId = postId;
 
     console.log('2. Generating CommentUpdated event...');
     await generateCommentUpdatedEvent(commentToUpdate, res);
 
     console.log('3. Comment updated!');
-    res.send({ status: 'OK' });
+    res.send({ status: 'OK', ...comments });
+  } else {
+    res.send({ status: 'OK', ...req.body });
   }
-
-  res.send({ status: 'OK', ...req.body });
 });
 
 app.listen(4010, () => console.log('Comments service listening on 4010'));
