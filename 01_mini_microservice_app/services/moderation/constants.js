@@ -1,0 +1,5 @@
+const BANNED_WORDS = ['orange', 'apple'];
+const APPROVED_STATUS = 'APPROVED';
+const REJECTED_STATUS = 'REJECTED';
+
+module.exports = { BANNED_WORDS, APPROVED_STATUS, REJECTED_STATUS };
