@@ -13,6 +13,17 @@ app.get('/posts/:id/comments', (req, res) => {
   res.send(commentsByPostId[req.params.id] || []);
 });
 
+const generateCommentCreatedEvent = async (commentData, res) => {
+  try {
+    await axios.post('http://localhost:4500/events', {
+      type: 'CommentCreated',
+      data: commentData,
+    });
+  } catch (err) {
+    res.send(err.message);
+  }
+};
+
 app.post('/posts/:id/comments', async (req, res) => {
   const generatedCommentId = randomBytes(4).toString('hex');
   const { content } = req.body;
@@ -24,16 +35,14 @@ app.post('/posts/:id/comments', async (req, res) => {
   postComments.push(newComment);
   commentsByPostId[postId] = postComments;
 
-  try {
-    await axios.post('http://localhost:4500/events', {
-      type: 'CommentCreated',
-      data: { ...newComment, postId },
-    });
-  } catch (err) {
-    res.send(err.message);
-  }
+  await generateCommentCreatedEvent({ ...newComment, postId }, res);
 
   res.status(201).send(postComments);
+});
+
+app.post('/events', (req, res) => {
+  console.log('Received event:', req.body);
+  res.send({ status: 'OK', ...req.body });
 });
 
 app.listen(4010, () => console.log('Comments service listening on 4010'));

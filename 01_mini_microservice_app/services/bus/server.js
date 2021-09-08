@@ -5,13 +5,13 @@ const app = express();
 app.use(express.json());
 
 app.post('/events', async (req, res) => {
-  // The whole request body contains the event
+  // Assume the whole request body contains the event
   const event = req.body;
 
   try {
-    await axios.post('https://localhost:4000/events', event);
-    await axios.post('https://localhost:4010/events', event);
-    await axios.post('https://localhost:4020/events', event);
+    await axios.post('http://localhost:4000/events', event);
+    await axios.post('http://localhost:4010/events', event);
+    await axios.post('http://localhost:4020/events', event);
 
     res.status(200).send({ status: 'OK' });
   } catch (err) {
