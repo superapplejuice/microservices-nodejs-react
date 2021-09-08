@@ -11,6 +11,7 @@ const PostCard = ({ id, title, comments }) => (
       borderWidth: 1,
       borderStyle: 'solid',
       margin: 8,
+      flexBasis: '20%',
     }}
   >
     <h4>{title}</h4>
