@@ -9,3 +9,7 @@ export const generateNetworkError = error => {
     `Something went wrong${defaultErrMessage}`
   );
 };
+
+export const refreshPage = () => {
+  return window.location.reload();
+};
