@@ -24,9 +24,8 @@ app.get('/posts', (req, res) => {
 });
 
 app.post('/events', (req, res) => {
-  console.log('Query service received event:', req.body);
-
   const { type, data } = req.body;
+  console.log('Query service received event:', type);
 
   if (type === 'PostCreated') {
     console.log('1. Adding created post...');

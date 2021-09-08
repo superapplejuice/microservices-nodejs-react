@@ -5,7 +5,7 @@ const app = express();
 app.use(express.json());
 
 app.post('/events', async (req, res) => {
-  console.log('Event bus received event:', req.body);
+  console.log('Event bus received event:', req.body.type);
 
   // Assume the whole request body contains the event
   const event = req.body;

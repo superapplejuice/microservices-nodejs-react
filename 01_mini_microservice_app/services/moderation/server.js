@@ -18,8 +18,8 @@ const generateCommentModeratedEvent = async (commentData, res) => {
 };
 
 app.post('/events', async (req, res) => {
-  console.log('Moderation event received event:', req.body);
   const { type, data } = req.body;
+  console.log('Moderation event received event:', type);
 
   if (type === 'CommentCreated') {
     console.log('1. Moderating comment...');
