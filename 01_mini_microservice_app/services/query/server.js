@@ -1,12 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 
-const {
-  handlePostCreated,
-  handleCommentCreated,
-  handleCommentUpdated,
-} = require('./event-handlers');
-
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -23,7 +17,7 @@ app.use(cors());
  *   }
  * };
  */
-let posts = {};
+const posts = {};
 
 app.get('/posts', (req, res) => {
   res.send(posts);
@@ -34,15 +28,31 @@ app.post('/events', (req, res) => {
   console.log('Query service received event:', type);
 
   if (type === 'PostCreated') {
-    posts = { ...posts, ...handlePostCreated(data, posts) };
+    console.log('1. Adding created post...');
+
+    const { id, title } = data;
+
+    posts[id] = { id, title, comments: [] };
   }
 
   if (type === 'CommentCreated') {
-    posts = { ...posts, ...handleCommentCreated(data, posts) };
+    console.log('1. Adding created comment...');
+
+    const { id, content, postId, status } = data;
+    const post = posts[postId];
+
+    post.comments.push({ id, content, status });
   }
 
   if (type === 'CommentUpdated') {
-    posts = { ...posts, ...handleCommentUpdated(data, posts) };
+    console.log('1. Updating updated comment...');
+
+    const { id, content, postId, status } = data;
+    const post = posts[postId];
+    const commentToUpdate = post.comments.find(comment => comment.id === id);
+
+    commentToUpdate.status = status;
+    commentToUpdate.content = content;
   }
 
   console.log('2. Query complete!');
