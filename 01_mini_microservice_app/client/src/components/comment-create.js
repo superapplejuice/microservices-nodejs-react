@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 import { COMMENTS_URL } from '../constants';
-import { generateNetworkError } from '../utils';
+import { generateNetworkError, refreshPage } from '../utils';
 
 const CommentCreate = ({ postId }) => {
   const [content, setContent] = useState('');
@@ -26,6 +26,7 @@ const CommentCreate = ({ postId }) => {
       setSubmitError('');
       setSubmitMessage('Comment posted successfully');
       setIsSubmitting(false);
+      refreshPage();
     } catch (err) {
       setIsSubmitting(false);
       setSubmitMessage('');

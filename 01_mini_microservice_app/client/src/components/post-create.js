@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 import { POSTS_URL } from '../constants';
-import { generateNetworkError } from '../utils';
+import { generateNetworkError, refreshPage } from '../utils';
 
 const PostCreate = () => {
   const [title, setTitle] = useState('');
@@ -26,6 +26,7 @@ const PostCreate = () => {
       setSubmitError('');
       setSubmitMessage('Post created successfully');
       setIsSubmitting(false);
+      refreshPage();
     } catch (err) {
       setIsSubmitting(false);
       setSubmitMessage('');
