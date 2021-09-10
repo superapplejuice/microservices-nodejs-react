@@ -1,13 +1,15 @@
 const express = require('express');
 const cors = require('cors');
 
+const { handleEvent, getEvents } = require('./event-handlers');
+
 const app = express();
 app.use(express.json());
 app.use(cors());
 
 /**
  * type Post = {
- *   [key: string]: {
+ *   [postId: string]: {
  *     id: string,
  *     title: string,
  *     comments: [{
@@ -24,39 +26,16 @@ app.get('/posts', (req, res) => {
 });
 
 app.post('/events', (req, res) => {
-  const { type, data } = req.body;
-  console.log('Query service received event:', type);
+  console.log('Query service received event:', req.body.type);
 
-  if (type === 'PostCreated') {
-    console.log('1. Adding created post...');
-
-    const { id, title } = data;
-
-    posts[id] = { id, title, comments: [] };
-  }
-
-  if (type === 'CommentCreated') {
-    console.log('1. Adding created comment...');
-
-    const { id, content, postId, status } = data;
-    const post = posts[postId];
-
-    post.comments.push({ id, content, status });
-  }
-
-  if (type === 'CommentUpdated') {
-    console.log('1. Updating updated comment...');
-
-    const { id, content, postId, status } = data;
-    const post = posts[postId];
-    const commentToUpdate = post.comments.find(comment => comment.id === id);
-
-    commentToUpdate.status = status;
-    commentToUpdate.content = content;
-  }
+  handleEvent(posts, req.body);
 
   console.log('2. Query complete!');
   res.send({ status: 'OK', message: 'Query complete' });
 });
 
-app.listen(4020, () => console.log('Query server listening on 4020'));
+app.listen(4020, async () => {
+  console.log('Query server listening on 4020');
+
+  await getEvents(posts);
+});
