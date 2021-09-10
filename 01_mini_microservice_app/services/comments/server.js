@@ -34,7 +34,7 @@ app.post('/posts/:id/comments', async (req, res) => {
 
   const postId = req.params.id;
   const postComments = commentsByPostId[postId] || [];
-  const newComment = { id: generatedCommentId, content, status: PENDING_STATUS };
+  const newComment = { id: generatedCommentId, content, postId, status: PENDING_STATUS };
 
   postComments.push(newComment);
   commentsByPostId[postId] = postComments;
@@ -69,15 +69,14 @@ app.post('/events', async (req, res) => {
     const commentToUpdate = comments.find(comment => comment.id === id);
 
     commentToUpdate.status = status;
-    commentToUpdate.postId = postId;
 
     console.log('2. Generating CommentUpdated event...');
     await generateCommentUpdatedEvent(commentToUpdate, res);
 
     console.log('3. Comment updated!');
-    res.send({ status: 'OK' });
+    res.send({ status: 'OK', message: 'Comment updated' });
   } else {
-    res.send({ status: 'OK', ...req.body });
+    res.send({ status: 'OK', message: 'Event received' });
   }
 });
 

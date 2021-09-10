@@ -13,27 +13,36 @@ const generateCommentModeratedEvent = async (commentData, res) => {
       data: commentData,
     });
   } catch (err) {
-    res.send(err.message);
+    res.send({ status: 'Error', message: err.message });
   }
 };
 
 app.post('/events', async (req, res) => {
-  const { type, data } = req.body;
-  console.log('Moderation event received event:', type);
+  const {
+    type,
+    data: { id, postId, content },
+  } = req.body;
+  console.log('Moderation service received event:', type);
 
   if (type === 'CommentCreated') {
     console.log('1. Moderating comment...');
-    const newStatus = BANNED_WORDS.some(word => data.content.includes(word))
+    const newStatus = BANNED_WORDS.some(word => content.includes(word))
       ? REJECTED_STATUS
       : APPROVED_STATUS;
 
     console.log('2. Generating CommentModerated event...');
-    await generateCommentModeratedEvent({ ...data, status: newStatus }, res);
+    const commentData = {
+      id,
+      postId,
+      content,
+      status: newStatus,
+    };
+    await generateCommentModeratedEvent(commentData, res);
 
     console.log('3. Comment moderated!');
-    res.send({ status: 'OK' });
+    res.send({ status: 'OK', message: 'Comment moderated' });
   } else {
-    res.send({ status: 'OK', ...req.body });
+    res.send({ status: 'OK', message: 'Event received' });
   }
 });
 
